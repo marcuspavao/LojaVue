@@ -12,7 +12,7 @@
         <input type="text" placeholder="Valor" v-model="valor" />
       </li>
       <li>
-        <input type="submit" value="Enviar" v-on:click="submitObject" />
+        <input type="submit" value="Enviar" v-on:click="submitAPI(); submitObject($event)" />
       </li>
     </ul>
     <div v-if="mostrarobjeto">
@@ -26,6 +26,9 @@
 </template>
 
 <script>
+const axios = require('axios')
+import { assertExpressionStatement } from '@babel/types';
+
 export default {
   name: "Cadastro",
   data() {
@@ -39,8 +42,22 @@ export default {
     };
   },
   methods: {
+    submitAPI(){
+         this.objeto = {
+        tipo: this.tipo,
+        quantidade: this.quantidade,
+        valor: this.valor,
+      };
+      axios.post('http://localhost:3000/roupa', this.objeto)
+      .then(()=>{
+        console.log("Roupa cadastrada")
+      })
+      .catch((error)=>{
+        console.log(error)
+      })
+    },
     submitObject(e) {
-      e.preventDefault();
+      e.preventDefault()
       this.mostrarobjeto = true
       this.objeto = {
         tipo: this.tipo,
